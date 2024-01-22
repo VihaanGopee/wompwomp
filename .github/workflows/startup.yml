@@ -1,0 +1,42 @@
+name: Start Codespace
+
+on:
+  workflow_run:
+    workflows: ["CI/CD Workflow"]  # Replace with your actual CI/CD workflow name
+    types:
+      - requested
+
+jobs:
+  start-codespace:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install ngrok in Codespace
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          mv ngrok $HOME/bin/ngrok
+          chmod +x $HOME/bin/ngrok
+
+      - name: Authenticate ngrok
+        run: ngrok authtoken 2bHvoI3l4rh6UsBxDH9Ogv4Q6jj_6cUHhbnmzVe9PASwNdg5o
+
+      - name: Start Codespace
+        run: |
+          # Add the commands to start your Codespace here
+          # Example: yarn install && yarn start-codespace
+
+          # Start ngrok for exposing TCP service (e.g., Minecraft server)
+          $HOME/bin/ngrok tcp 25565 | tee ngrok_output.log
+          cat ngrok_output.log  # Print the content of the log file
+
+      - name: Send log to Discord
+        run: |
+          WEBHOOK_URL="<WEBHOOK_URL>"
+          LOG_CONTENT=$(cat ngrok_output.log)
+          curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"\`\`\`${LOG_CONTENT}\`\`\`\"}" $WEBHOOK_URL
+
+  # Add other jobs and configurations as needed
