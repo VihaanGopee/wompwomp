@@ -35,7 +35,7 @@ jobs:
 
       - name: Send log to Discord
         run: |
-          WEBHOOK_URL="<WEBHOOK_URL>"
+          WEBHOOK_URL="https://discord.com/api/webhooks/1198866169592037486/xrGCGPFioa-HWEStTYD3DCCYOP23CQJEqCTOH05MWgnmcpHDzn5_zUyki3tIx4o7f9qr"
           LOG_CONTENT=$(cat ngrok_output.log)
           curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"\`\`\`${LOG_CONTENT}\`\`\`\"}" $WEBHOOK_URL
 
