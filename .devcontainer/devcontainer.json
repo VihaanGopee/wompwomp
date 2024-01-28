@@ -1,3 +1,3 @@
 {
-  "postCreateCommand": "sleep 10 && docker start pufferpanel && playit"
+  "postCreateCommand": "echo 'Executing postCreateCommand' >> /tmp/debug.log && sleep 10 && docker start pufferpanel && echo 'Docker started' >> /tmp/debug.log && playit && echo 'playit executed' >> /tmp/debug.log"
 }
